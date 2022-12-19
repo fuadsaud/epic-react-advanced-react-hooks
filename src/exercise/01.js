@@ -4,7 +4,12 @@
 import * as React from 'react'
 
 function countReducer(oldState, newState) {
-  return Object.assign({}, oldState, newState)
+  if (typeof newState === 'function') {
+    return newState(oldState)
+  }
+  else {
+    return Object.assign({}, oldState, newState)
+  }
 }
 
 function Counter({initialCount = 0, step = 1}) {
@@ -16,7 +21,7 @@ function Counter({initialCount = 0, step = 1}) {
   // changes to the next two lines of code! Remember:
   // The 1st argument is called "state" - the current value of count
   // The 2nd argument is called "newState" - the value passed to setCount
-  const increment = () => dispatch({count: count + step})
+  const increment = () => dispatch(currentState => ({count: currentState.count + step}))
   return <button onClick={increment}>{count}</button>
 }
 
